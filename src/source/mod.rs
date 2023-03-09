@@ -2,6 +2,8 @@
 
 use std::time::Duration;
 
+use cpal::FromSample;
+
 use crate::Sample;
 
 pub use self::amplify::Amplify;
@@ -22,6 +24,7 @@ pub use self::repeat::Repeat;
 pub use self::samples_converter::SamplesConverter;
 pub use self::sine::SineWave;
 pub use self::skip::SkipDuration;
+pub use self::skippable::Skippable;
 pub use self::spatial::Spatial;
 pub use self::speed::Speed;
 pub use self::stoppable::Stoppable;
@@ -47,6 +50,7 @@ mod repeat;
 mod samples_converter;
 mod sine;
 mod skip;
+mod skippable;
 mod spatial;
 mod speed;
 mod stoppable;
@@ -158,6 +162,7 @@ where
     fn mix<S>(self, other: S) -> Mix<Self, S>
     where
         Self: Sized,
+        Self::Item: FromSample<S::Item>,
         S: Source,
         S::Item: Sample,
     {
@@ -224,6 +229,7 @@ where
     fn take_crossfade_with<S: Source>(self, other: S, duration: Duration) -> Crossfade<Self, S>
     where
         Self: Sized,
+        Self::Item: FromSample<S::Item>,
         <S as Iterator>::Item: Sample,
     {
         crossfade::crossfade(self, other, duration)
@@ -315,6 +321,13 @@ where
         Self: Sized,
     {
         stoppable::stoppable(self)
+    }
+
+    fn skippable(self) -> Skippable<Self>
+    where
+        Self: Sized,
+    {
+        skippable::skippable(self)
     }
 
     /// Applies a low-pass filter to the source.
