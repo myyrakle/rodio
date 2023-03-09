@@ -51,10 +51,12 @@ where
     #[inline]
     fn next(&mut self) -> Option<I::Item> {
         let next = self.input.next();
+
         if !self.signal_sent && next.is_none() {
             self.signal.fetch_sub(1, Ordering::Relaxed);
             self.signal_sent = true;
         }
+
         next
     }
 
