@@ -1,5 +1,5 @@
 [package]
-name = "rodio"
+name = "rodiogaga"
 version = "0.17.1"
 authors = ["Pierre Krieger <pierre.krieger1708@gmail.com>"]
 license = "MIT OR Apache-2.0"
