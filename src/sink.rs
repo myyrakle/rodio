@@ -154,7 +154,6 @@ impl Sink {
     /// No effect if not paused.
     #[inline]
     pub fn play(&self) {
-        self.controls.stopped.store(false, Ordering::SeqCst);
         self.controls.pause.store(false, Ordering::SeqCst);
     }
 
